@@ -29,6 +29,15 @@ release:
 		# Build for win(386)
 		go clean
 		CGO_ENABLED=0 GOOS=windows GOARCH=386 go build -o bin/${BINARY}_windows_386.exe
+		# Build for linux(arm)
+		go clean
+		CGO_ENABLED=0 GOOS=linux GOARCH=arm go build -o bin/${BINARY}_linux_arm
+		# Build for freebsd(386)
+		go clean
+		CGO_ENABLED=0 GOOS=freebsd GOARCH=386 go build -o bin/${BINARY}_freebsd_386
+		# Build for freebsd(x64)
+		go clean
+		CGO_ENABLED=0 GOOS=freebsd GOARCH=amd64 go build -o bin/${BINARY}_freebsd_amd64
 		go clean
 # Cleans our projects: deletes binaries
 clean:
