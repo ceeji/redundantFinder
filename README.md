@@ -10,7 +10,13 @@ Find and delete redundant files in specific directory. Support multiple director
 - `Cross Platform`: All major platforms are supported.
 
 ## Usage
+
+```shell
 redundantFinder [-r] [-ext=extensions] <target_directory> ...
+Copyright(C) 2019 Ceeji Cheng <hi.ceeji#gmail.com> and contributors
+
   -ext string
-        specify file extension for scanning, any file without these extension will be ignored. it should be split by '|'. (default "jpg|png|arw|raw|nec|jpeg")
-  -r    delete extra copies after scan
+        specify file extensions for scanning, any file without these extension will be ignored. Multiple values should be splited by '|'. If empty, any file will be included. (default "jpg|png|arw|raw|nec|jpeg|mp4|mp3|json|m4a|avi|mpeg|mpg|dat|doc|docx|ppt|pptx|db|txt|zip|gz|bz|7z|tar|rar|bzip|iso|pkg|wav")
+  -r    delete redundant copies after scan
+  -v    show version and exit
+```
