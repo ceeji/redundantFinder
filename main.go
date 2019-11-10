@@ -9,6 +9,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"runtime"
 	"sort"
 	"strings"
 )
@@ -106,14 +107,23 @@ func deleteDuplicate() {
 }
 
 func printUsage() {
-	fmt.Println("duplicateFinder [-r] [-ext=extensions] <target_directory> ...")
+	fmt.Println("redundantFinder [-r] [-ext=extensions] <target_directory> ...")
+	fmt.Println("Copyright(C) 2019 Ceeji Cheng <hi.ceeji#gmail.com> and contributors")
+	fmt.Println()
+
 	flag.PrintDefaults()
 }
 
 func parseCLI() (dirs []string, ext []string, delete bool) {
-	r := flag.Bool("r", false, "delete extra copies after scan")
-	exts := flag.String("ext", "jpg|png|arw|raw|nec|jpeg", "specify file extension for scanning, any file without these extension will be ignored")
+	r := flag.Bool("r", false, "delete redundant copies after scan")
+	v := flag.Bool("v", false, "show version and exit")
+	exts := flag.String("ext", "jpg|png|arw|raw|nec|jpeg|mp4|mp3|json|m4a|avi|mpeg|mpg|dat|doc|docx|ppt|pptx|db|txt|zip|gz|bz|7z|tar|rar|bzip|iso|pkg|wav", "specify file extensions for scanning, any file without these extension will be ignored. Multiple values should be splited by '|'. If empty, any file will be included.")
 	flag.Parse()
+
+	if *v {
+		fmt.Println("version 1.0.1_" + runtime.Compiler + "_" + runtime.GOOS + "_" + runtime.GOARCH)
+		os.Exit(0)
+	}
 
 	dirs = flag.Args()
 
