@@ -1,6 +1,6 @@
 # redundantFinder
 
-[![Release][3]][4] [![MIT licensed][5]][6] [![Build Status][1]][2] [![Go Report Card][7]][8]
+[![MIT licensed][5]][6] [![Go Report Card][7]][8]
 
 [1]: https://travis-ci.org/ceeji/redundantFinder.svg?branch=master
 [2]: https://travis-ci.org/ceeji/redundantFinder
