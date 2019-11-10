@@ -1,5 +1,17 @@
 # redundantFinder
-Find and delete redundant files in specific directory. Support multiple directories.
+
+[![Release][3]][4] [![MIT licensed][5]][6] [![Build Status][1]][2] [![Go Report Card][7]][8]
+
+[1]: https://travis-ci.org/ceeji/redundantFinder.svg?branch=master
+[2]: https://travis-ci.org/ceeji/redundantFinder
+[3]: http://github-release-version.herokuapp.com/github/ceeji/redundantFinder/release.svg?style=flat
+[4]: https://github.com/ceeji/redundantFinder/releases
+[5]: https://img.shields.io/dub/l/vibe-d.svg
+[6]: LICENSE
+[7]: https://goreportcard.com/badge/github.com/ceeji/redundantFinder
+[8]: https://goreportcard.com/report/github.com/ceeji/redundantFinder
+
+Yet another (and modern) tool to find and delete redundant files in specific directory. Support multiple directories.
 
 You could download executable files directly in [release page](https://github.com/ceeji/redundantFinder/releases).
 
