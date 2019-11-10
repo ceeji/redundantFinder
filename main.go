@@ -19,6 +19,8 @@ type duplicateGroupInfo struct {
 	list []string
 }
 
+const version = "1.0.1"
+
 var sameSizeFileList []string // files that have at least one file with same length
 var fileSizeBucket = make(map[int64][]string)
 var fileHashesPathMap = make(map[[sha512.Size]byte]*duplicateGroupInfo)
@@ -99,7 +101,11 @@ func deleteDuplicate() {
 		fmt.Printf("\nGroup %s: %d copies (%d MB each)\n", hex.EncodeToString(hash[:])[:6], len(info.list), info.size/1024/1024)
 		for _, path := range info.list[1:] {
 			fmt.Printf("  Deleting copy %s\n", path)
-			os.Remove(path)
+			err := os.Remove(path)
+
+			if err != nil {
+				fmt.Println(err)
+			}
 		}
 	}
 
@@ -108,7 +114,7 @@ func deleteDuplicate() {
 
 func printUsage() {
 	fmt.Println("redundantFinder [-r] [-ext=extensions] <target_directory> ...")
-	fmt.Println("Copyright(C) 2019 Ceeji Cheng <hi.ceeji#gmail.com> and contributors")
+	fmt.Println(strings.Replace("Copyright(C) 2019 Ceeji Cheng <hi.ceeji#gmail.com> and contributors", "#", "@", 1))
 	fmt.Println()
 
 	flag.PrintDefaults()
@@ -121,7 +127,7 @@ func parseCLI() (dirs []string, ext []string, delete bool) {
 	flag.Parse()
 
 	if *v {
-		fmt.Println("version 1.0.1_" + runtime.Compiler + "_" + runtime.GOOS + "_" + runtime.GOARCH)
+		fmt.Println("version " + version + "_" + runtime.Compiler + "_" + runtime.GOOS + "_" + runtime.GOARCH)
 		os.Exit(0)
 	}
 
@@ -176,5 +182,8 @@ func main() {
 	// delete files
 	if delete {
 		deleteDuplicate()
+	} else {
+		fmt.Println()
+		fmt.Println("Add -r option to remove redundant files.")
 	}
 }

@@ -5,8 +5,9 @@ Find and delete redundant files in specific directory. Support multiple director
 
 ## Highlights
 - `Fast`: Very fast when being used with large files and only a small part of files are redundant. It will firstly compare files using file size, and then compare file's content using `sha512`. Normally every file has different size (especially for videos and images) so we could reduce times we need to scan file's content.
-- `Reliable`: Use `sha512` (not `md5` or `sha1`) to reduce the chance that two files are different but have same hash. But remember there are still very very low possibility. Please take care.
+- `Reliable`: Use `sha512` (not `md5` or `sha1`) to reduce the chance that two files are different but have same hash. But remember there are still very very low possibility. Please take care. Also, unless used with `-r`, no action will be actually taken.
 - `Multiple Directories`: You could use it with multiple directories.
+- `Ordered`: The program will sort file paths in a redundant group so you could infer which file will be kept to avoid you looking for files in different directories.
 - `Cross Platform`: All major platforms are supported.
 
 ## Usage
