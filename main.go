@@ -128,6 +128,10 @@ func checkFileLength(path string, info os.FileInfo, err error) error {
 			return nil
 		}
 	}
+	// ignore hidden and thumbnail files
+	if strings.Contains(path, "@__thumb") || strings.Contains(path, "/.") {
+		return nil
+	}
 
 	fileSizeBucket[info.Size()] = append(fileSizeBucket[info.Size()], path)
 	totalFileCount++
