@@ -5,6 +5,7 @@ import (
 	"encoding/hex"
 	"flag"
 	"fmt"
+	"github.com/cheggaaa/pb/v3"
 	"io"
 	"log"
 	"os"
@@ -129,7 +130,7 @@ func checkFileLength(path string, info os.FileInfo, err error) error {
 		}
 	}
 	// ignore hidden and thumbnail files
-	if strings.Contains(path, "@__thumb") || strings.Contains(path, "/.") {
+	if strings.Contains(path, "@__thumb") || strings.Contains(path, "/.") || strings.Contains(path, "@Recently-Snapshot") || strings.Contains(path, "@Recycle") {
 		return nil
 	}
 
@@ -188,14 +189,40 @@ func parseCLI() (dirs []string, ext []string, delete bool, disableSmallHash bool
 	return dirs, strings.Split(*exts, "|"), *r, *p
 }
 
+func testBar() {
+	count := 100000
+
+	// create and start new bar
+	// bar := pb.StartNew(count)
+
+	// start bar from 'default' template
+	// bar := pb.Default.Start(count)
+
+	// start bar from 'simple' template
+	// bar := pb.Simple.Start(count)
+
+	// start bar from 'full' template
+	bar := pb.Full.Start(count)
+
+	for i := 0; i < count; i++ {
+		bar.Increment()
+		time.Sleep(time.Millisecond)
+	}
+
+	// finish bar
+	bar.Finish()
+}
+
 func main() {
 	// parse command line
-	dirs, _exts, delete, disableSmallHash := parseCLI()
+	dirs, _exts, shouldDelete, disableSmallHash := parseCLI()
 	exts = _exts
 
 	// start working
 	startTime := time.Now()
 	fmt.Print("Step 1: Scanning Possibly Duplicate Files...")
+
+	// testBar()
 
 	for _, dir := range dirs {
 		err := filepath.Walk(dir, checkFileLength)
@@ -217,12 +244,14 @@ func main() {
 
 	// using small hash to exclude some files
 	if disableSmallHash == false {
+		bar := pb.Full.Start(len(sameSizeFileList))
 		for i, path := range sameSizeFileList {
 			err := checkDuplicate(i+1, path, HashModeSmall)
 			if err != nil {
+				fmt.Println()
 				fmt.Println(err)
-				os.Exit(1)
 			}
+			bar.Increment()
 		}
 
 		// extract files only for those which have at least one file with duplicate small hash
@@ -232,23 +261,27 @@ func main() {
 				sameSizeFileList = append(sameSizeFileList, info.list...)
 			}
 		}
+		bar.Finish()
 	}
 
 	fmt.Printf("%d / %d files are possibly duplicate.\n", len(sameSizeFileList), totalFileCount)
 
 	fmt.Println("Step 2: Checking file content...")
+	bar := pb.Full.Start(len(sameSizeFileList))
 	for i, path := range sameSizeFileList {
 		err := checkDuplicate(i+1, path, HashModeFull)
 		if err != nil {
 			fmt.Println(err)
 			os.Exit(1)
 		}
+		bar.Increment()
 	}
+	bar.Finish()
 
 	fmt.Printf("Finish, %d group files has %d copies, %d will be deleted, time consuming: %v.\n", totalDuplicateGroupCount, totalDuplicateCount, totalDuplicateCount-totalDuplicateGroupCount, time.Now().Sub(startTime))
 
-	// delete files
-	if delete {
+	// shouldDelete files
+	if shouldDelete {
 		deleteDuplicate()
 	} else {
 		fmt.Println()
